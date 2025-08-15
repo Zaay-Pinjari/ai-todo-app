@@ -3,11 +3,17 @@ import { BsChatQuote } from "react-icons/bs";
 import { FaRegLightbulb } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { IoMdKey } from "react-icons/io";
 import { useTodoList } from "@/app/context/TodoListContext";
 import { FaPlus } from "react-icons/fa";
 import InputPopup from "./InputPopup";
+import ApiKeyPopupComponent from "./ApiKeyPopupComponent";
 
 const LeftSide = () => {
+  // API KEY FOR USER
+  const [apiKey, setApiKey] = useState("");
+  const [apiKeyPopup, setApiKeyPopup] = useState(false);
+
   // CHECK IF USER IS ONLINE OR OFFLINE
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -42,6 +48,14 @@ const LeftSide = () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
+  }, []);
+
+  // LOAD API KEY FROM LOCAL STORAGE ON COMPONENT MOUNT
+  useEffect(() => {
+    const storedApiKey = localStorage.getItem("userGeminiApiKey");
+    if (storedApiKey) {
+      setApiKey(storedApiKey);
+    }
   }, []);
 
   // LOAD TIPS FROM LOCAL STORAGE ON COMPONENT MOUNT
@@ -83,14 +97,26 @@ const LeftSide = () => {
     return () => clearInterval(interval);
   }, [quotes]);
 
-  // INITIALIZE GEMINI AI API WITH API KEY FROM ENVIRONMENT VARIABLES
-  const Api = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+  // MY API INITIALIZE GEMINI AI API WITH API KEY FROM ENVIRONMENT VARIABLES
+  // const Api = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+
+  // INITIALIZE GEMINI AI API WITH USER'S API KEY
+  const Api = apiKey ? new GoogleGenerativeAI(apiKey) : null;
+  // what new does
+  // this do? it initializes the Gemini AI API with the user's API key, allowing the app to use Gemini's generative capabilities.
 
   // FUNCTION TO GENERATE PRODUCTIVITY TIPS USING GEMINI AI
   const generateTip = async () => {
     // CHECK IF USER IS ONLINE BEFORE GENERATING TIPS
     if (!isOnline) {
       alert("You are offline. Please check your internet connection.");
+      return;
+    }
+
+    // CHECK IF API KEY IS SET AND API INSTANCE IS AVAILABLE
+    if (!apiKey || !Api) {
+      alert("Please enter a valid Gemini API key to use AI features.");
+      setApiKeyPopup(true);
       return;
     }
 
@@ -140,13 +166,20 @@ const LeftSide = () => {
       return;
     }
 
+    // CHECK IF API KEY IS SET AND API INSTANCE IS AVAILABLE
+    if (!apiKey || !Api) {
+      alert("Please enter a valid Gemini API key to use AI features.");
+      setApiKeyPopup(true);
+      return;
+    }
+
     try {
       // GET GEMINI MODEL INSTANCE
       const model = Api.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       // SEND PROMPT TO GEMINI TO GENERATE QUOTES BASED ON TODO LIST
       const result = await model.generateContent(
-        `Give me 1-2 line motivational quotes that are short, insightful, and productivity-focused speacially based on this tasks ${JSON.stringify(
+        `Give me 1-2 line motivational quotes that are short, insightful, and productivity-focused specially based on this tasks ${JSON.stringify(
           todoListArray
         )}.
     Respond ONLY with a clean JSON array of objects like this so i can use it in my app:
@@ -183,6 +216,13 @@ const LeftSide = () => {
     // CHECK IF USER IS ONLINE BEFORE GENERATING TIPS
     if (!isOnline) {
       alert("You are offline. Please check your internet connection.");
+      return;
+    }
+
+    // CHECK IF API KEY IS SET AND API INSTANCE IS AVAILABLE
+    if (!apiKey || !Api) {
+      alert("Please enter a valid Gemini API key to use AI features.");
+      setApiKeyPopup(true);
       return;
     }
 
@@ -240,8 +280,8 @@ const LeftSide = () => {
   };
   return (
     <div
-      // Right-hand side container of the app
-      className="app-rhs h-full w-[25%] 
+      // LEFT-hand side container of the app
+      className="app-lhs h-full w-[25%] 
           py-3 px-2 flex flex-col justify-between gap-2
           rounded-3xl border-1 border-zinc-700 "
     >
@@ -372,15 +412,23 @@ const LeftSide = () => {
         </div>
       </div>
 
-      {/* Info Section */}
-      <div className="info">
-        <div className="text-xs text-zinc-400 px-4 mb-4">
-          <h4>
-            Ai Mode will help you with useful tips and quotes based on your
-            tasks and inputs.
-          </h4>
-        </div>
+      {/* API Section */}
+      <div className="API-Section">
+        <button
+          title="Enter your Gemini API Key"
+          onClick={() => setApiKeyPopup(true)}
+          className="w-full h-12 flex items-center justify-center gap-2 
+      rounded-2xl transition-all bg-zinc-800 text-white hover:border border-zinc-700 hover:bg-zinc-800 active:scale-95"
+        >
+          <IoMdKey className="text-xl" />
+          <span className="text-zinc-300 font-semibold">Api Key</span>
+        </button>
       </div>
+
+      {/* ==================== API KEY POPUP ==================== */}
+      {apiKeyPopup && (
+        <ApiKeyPopupComponent setApiKeyPopup={setApiKeyPopup} setApiKey={setApiKey} />
+      )}
 
       {/* ==================== POPUP FOR GENERATE PLAN ==================== */}
       {planPopup && (
