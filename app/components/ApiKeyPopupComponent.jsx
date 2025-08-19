@@ -47,7 +47,7 @@ const ApiKeyPopupComponent = ({ setApiKey, setApiKeyPopup }) => {
   return (
     <div
       onClick={() => setApiKeyPopup(false)}
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 px-3"
       role="dialog"
       aria-labelledby="api-key-popup-title"
     >

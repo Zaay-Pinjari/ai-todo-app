@@ -10,6 +10,13 @@
   box-sizing: border-box;
 }
 
+
+/* SELECTION COLOR */
+::selection{
+  background-color: white; 
+  color: black;
+}
+
 button {
   cursor: pointer;
 }

@@ -281,7 +281,7 @@ const LeftSide = () => {
   return (
     <div
       // LEFT-hand side container of the app
-      className="app-lhs h-full w-[25%] 
+      className="app-lhs h-full w-full md:w-[25%]  
           py-3 px-2 flex flex-col justify-between gap-2
           rounded-3xl border-1 border-zinc-700 "
     >
@@ -427,7 +427,10 @@ const LeftSide = () => {
 
       {/* ==================== API KEY POPUP ==================== */}
       {apiKeyPopup && (
-        <ApiKeyPopupComponent setApiKeyPopup={setApiKeyPopup} setApiKey={setApiKey} />
+        <ApiKeyPopupComponent
+          setApiKeyPopup={setApiKeyPopup}
+          setApiKey={setApiKey}
+        />
       )}
 
       {/* ==================== POPUP FOR GENERATE PLAN ==================== */}

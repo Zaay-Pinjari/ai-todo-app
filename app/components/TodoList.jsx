@@ -135,9 +135,12 @@ const TodoList = ({ taskDetails, idx }) => {
 
       {/* 📋 Task Item */}
       <li
-        className={`min-h-20 w-full shrink-0 py-2 px-6 rounded-3xl bg-zinc-800 
-        border border-white/10 
-        flex justify-between items-center task-item cursor-pointer transition-all ease-in-out`}
+        onClick={handleCheck}
+        className={`min-h-20 w-full shrink-0 py-2 px-6 rounded-3xl 
+        bg-zinc-800 border border-white/10
+        flex justify-between items-center task-item cursor-pointer 
+        duration-100 transition-all ease-in-out
+        active:scale-98`}
       >
         <div className="flex gap-4 items-center">
           <div className="task-content">
@@ -152,7 +155,12 @@ const TodoList = ({ taskDetails, idx }) => {
             </h2>
 
             {/* Task Description */}
-            <h4 className="text-sm font-normal text-white/70 mb-2">
+            <h4
+              className={`text-sm font-normal text-white/70 mb-2 w-[75%] md:w-[100%]  
+                ${
+                taskDetails.isTaskDone ? "line-through decoration-black" : ""
+              } `}
+            >
               {taskDetails.shortDescription || "Simple But Helpful Todo"}
             </h4>
 
@@ -172,10 +180,24 @@ const TodoList = ({ taskDetails, idx }) => {
 
               {/* Edit & Delete Buttons */}
               <div className="editOptions flex gap-2 items-center justify-center rounded-full">
-                <button onClick={() => setShowEditPopup(!showEditPopup)}>
+                <button
+                  onClick={(e) => {
+                    // Prevent click from propagating to the li
+                    e.stopPropagation();
+                    // Toggle edit popup visibility
+                    setShowEditPopup(!showEditPopup);
+                  }}
+                >
                   <FaPencil className="text-blue-400 text-[15px] cursor-pointer active:scale-95" />
                 </button>
-                <button onClick={() => handleTaskDelete(idx)}>
+                <button
+                  onClick={(e) => {
+                    // Prevent click from propagating to the li
+                    e.stopPropagation();
+                    // Handle task deletion
+                    handleTaskDelete(idx);
+                  }}
+                >
                   <MdOutlineDeleteOutline className="text-red-400 text-[21px] cursor-pointer active:scale-95" />
                 </button>
               </div>
