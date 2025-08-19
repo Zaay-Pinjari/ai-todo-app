@@ -437,15 +437,15 @@ const LeftSide = () => {
       {planPopup && (
         <div
           onClick={() => setPlanPopup(false)} // Clicking outside closes popup
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 px-3 py-5"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 p-4"
         >
           <div
             onClick={(e) => e.stopPropagation()} // Prevent popup close when clicking inside
-            className="bg-zinc-800 text-white rounded-2xl p-6 w-full max-w-3xl h-full md:h-auto md:max-h-[90%] overflow-y-auto shadow-lg"
+            className="bg-zinc-800 text-white rounded-2xl p-4 sm:p-6 w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl h-full sm:h-auto sm:max-h-[90%] overflow-y-auto shadow-lg"
           >
             {/* Popup Header */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Quick Plan</h2>
+              <h2 className="text-base sm:text-lg font-semibold">Quick Plan</h2>
               <button
                 onClick={() => {
                   if (quickPlan) {
@@ -454,7 +454,7 @@ const LeftSide = () => {
                     );
                   }
                 }}
-                className="bg-zinc-700 hover:bg-zinc-600 px-3 py-1 rounded-lg text-xs"
+                className="bg-zinc-700 hover:bg-zinc-600 px-2 sm:px-3 py-1 rounded-lg text-xs"
               >
                 Copy
               </button>
@@ -462,38 +462,47 @@ const LeftSide = () => {
 
             {/* Popup Content */}
             {quickPlan ? (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Overview */}
-                <p className="text-zinc-300 text-sm">{quickPlan.overview}</p>
+                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
+                  {quickPlan.overview}
+                </p>
 
                 {/* Steps List */}
                 <div>
-                  <h3 className="font-semibold mb-2">Steps</h3>
-                  <ul className="list-decimal list-inside space-y-1 text-zinc-300 text-sm">
+                  <h3 className="font-semibold mb-2 text-sm sm:text-base">
+                    Steps
+                  </h3>
+                  <ul className="list-decimal list-inside space-y-1 sm:space-y-2 text-zinc-300 text-xs sm:text-sm pl-2">
                     {quickPlan.steps.map((step, idx) => (
-                      <li key={idx}>{step}</li>
+                      <li key={idx} className="leading-relaxed">
+                        {step}
+                      </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Tips List */}
                 <div>
-                  <h3 className="font-semibold mb-2">Tips</h3>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-300 text-sm">
+                  <h3 className="font-semibold mb-2 text-sm sm:text-base">
+                    Tips
+                  </h3>
+                  <ul className="list-disc list-inside space-y-1 sm:space-y-2 text-zinc-300 text-xs sm:text-sm pl-2">
                     {quickPlan.tips.map((tip, idx) => (
-                      <li key={idx}>{tip}</li>
+                      <li key={idx} className="leading-relaxed">
+                        {tip}
+                      </li>
                     ))}
                   </ul>
                 </div>
               </div>
             ) : (
               // Loading state while fetching quickPlan
-              <p className="text-zinc-400 text-sm">Loading...</p>
+              <p className="text-zinc-400 text-xs sm:text-sm">Loading...</p>
             )}
           </div>
         </div>
       )}
-
       {/* ==================== RHS ENDS ==================== */}
     </div>
   );
