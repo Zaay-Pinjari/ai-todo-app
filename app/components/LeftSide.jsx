@@ -437,7 +437,7 @@ const LeftSide = () => {
       {planPopup && (
         <div
           onClick={() => setPlanPopup(false)} // Clicking outside closes popup
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 px-3 py-5"
         >
           <div
             onClick={(e) => e.stopPropagation()} // Prevent popup close when clicking inside
